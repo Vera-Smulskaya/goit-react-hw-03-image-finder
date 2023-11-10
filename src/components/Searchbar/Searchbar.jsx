@@ -4,17 +4,17 @@ import css from './Searchbar.module.css';
 export default class Searchbar extends Component {
   render() {
     return (
-      <header className={scc.searchbar}>
-        <form class="form">
+      <header className={css.searchbar}>
+        <form className="form">
           <button type="submit" class="button">
-            <span class="button-label">Search</span>
+            <span className="button-label">Search</span>
           </button>
 
           <input
-            class="input"
+            className="input"
             type="text"
-            autocomplete="off"
-            autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
           />
         </form>
