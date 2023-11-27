@@ -3,9 +3,18 @@ import css from './ImageGalleryItem.module.css';
 
 export default class ImageGalleryItem extends Component {
   render() {
+    const { webformatURL, largeImageURL, tags, showModal } = this.props;
+
     return (
-      <li className={CSS.imageGalleryItem}>
-        <img className={CSS.imageGalleryItemImage} src="" alt="" />
+      <li
+        onClick={() => showModal(largeImageURL, tags)}
+        className={css.imageGalleryItem}
+      >
+        <img
+          className={CSS.imageGalleryItemImage}
+          src={webformatURL}
+          alt={tags}
+        />
       </li>
     );
   }
