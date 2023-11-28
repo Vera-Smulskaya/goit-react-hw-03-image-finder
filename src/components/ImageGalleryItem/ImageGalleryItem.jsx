@@ -11,7 +11,7 @@ export default class ImageGalleryItem extends Component {
         className={css.imageGalleryItem}
       >
         <img
-          className={CSS.imageGalleryItemImage}
+          className={css.imageGalleryItemImage}
           src={webformatURL}
           alt={tags}
         />
