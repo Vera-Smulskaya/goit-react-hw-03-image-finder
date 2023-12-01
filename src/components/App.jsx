@@ -30,6 +30,7 @@ export class App extends Component {
       );
       this.setState({ images: data.hits });
     } catch (error) {
+      this.setState({ error: error.message });
     } finally {
       this.setState({ isLoading: false });
     }
@@ -64,6 +65,11 @@ export class App extends Component {
     return (
       <div className={css.app}>
         <Searchbar onSubmit={this.onSubmit} />
+        {this.state.error !== null && (
+          <p className={css.errorBage}>
+            Ooops, some error occured... Error message: {this.state.error}
+          </p>
+        )}
         {this.state.isLoading && <Loader />}
         <ImageGallery images={this.state.images} showModal={this.toggleModal} />
         <Button onClick={this.onLoadMore}>Load more</Button>
