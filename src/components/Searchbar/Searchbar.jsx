@@ -31,19 +31,19 @@ export default class Searchbar extends Component {
     return (
       <header className={css.searchbar}>
         <form className="form" onSubmit={this.handleSubmit}>
-          <button type="submit" className="button">
+          <button type="submit" className={css.buttonSearch}>
             <span className="button-label">Search</span>
           </button>
 
           <input
-            className="input"
+            className={css.inputSearch}
             type="text"
             autoComplete="off"
             autoFocus
-            value={this.state.name}
+            value={this.state.query}
             onChange={this.handleChange}
             name="search"
-            placeholder="Search images and photos"
+            placeholder="write your word"
           />
         </form>
       </header>

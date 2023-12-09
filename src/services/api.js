@@ -17,7 +17,7 @@ export async function fetchPhoto(searchPhoto, page) {
   const response = await axios(`https://pixabay.com/api/?${searchParams}`);
 
   if (response.status === 404) {
-    Notiflix.Notify.failure('Sprry, some error occured.');
+    Notiflix.Notify.failure('Sorry, some error occured.');
     return Promise.reject();
   }
   return response;

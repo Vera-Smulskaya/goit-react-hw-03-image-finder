@@ -17,3 +17,17 @@
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
     0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
+
+.buttonSearch {
+  padding: 8px;
+  color: rgb(39, 37, 37);
+  font-size: 18px;
+  background-color: #9dabfc;
+  border: 1px solid #0b1653;
+}
+
+.inputSearch {
+  padding: 6px;
+  color: rgb(39, 37, 37);
+  font-size: 18px;
+}

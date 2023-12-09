@@ -33,10 +33,8 @@ export class App extends Component {
   fetchImages = async (query, page) => {
     try {
       await fetchPhoto(query, page).then(result => {
-        const data = result.data;
-        const images = data.hits;
-        const total = data.totalHits;
-        const lastImages = total - 12 * this.state.page;
+        const images = result.data.hits;
+        const lastImages = result.data.totalHits - 12 * this.state.page;
 
         if (images.length === 0) {
           this.setState({ showLoadMore: false });
@@ -52,12 +50,9 @@ export class App extends Component {
         lastImages > 0
           ? this.setState({ showLoadMore: true })
           : this.setState({ showLoadMore: false });
-        if (images.length > 0 && this.state.page === 1) {
-          Notiflix.Notify.success(`Yeeesss! We found ${total} images.`);
-        }
       });
     } catch (error) {
-      Notiflix.Notify.failure(' Oooops...Some error occured...');
+      Notiflix.Notify.info(' Sorry, some error occured.');
     } finally {
       this.setState({ isLoading: false });
     }
@@ -88,12 +83,14 @@ export class App extends Component {
         <Searchbar onSubmit={this.onSubmit} />
         {this.state.error !== null && (
           <p className={css.errorBage}>
-            Ooops, some error occured... Error message: {this.state.error}
+            Sorry, some error occured. Error message: {this.state.error}
           </p>
         )}
         {this.state.isLoading && <Loader />}
         <ImageGallery images={this.state.images} showModal={this.toggleModal} />
-        <Button onClick={this.onLoadMore}>Load more</Button>
+        {this.state.showLoadMore && (
+          <Button onClick={this.onLoadMore}>Load more</Button>
+        )}
         {this.state.showModal && (
           <Modal
             closeModal={this.toggleModal}

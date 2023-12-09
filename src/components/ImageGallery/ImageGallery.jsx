@@ -10,7 +10,7 @@ export default class ImageGallery extends Component {
       <ul className={css.imageGallery}>
         {images.map(image => (
           <ImageGalleryItem
-            key={image.id}
+            key={image.largeImageURL}
             webformatURL={image.webformatURL}
             largeImageURL={image.largeImageURL}
             tags={image.tags}
