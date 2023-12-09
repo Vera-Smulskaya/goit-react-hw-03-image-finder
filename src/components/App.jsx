@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
+import { fetchPhoto } from '../services/api';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Searchbar from './Searchbar/Searchbar';
-import axios from 'axios';
+import Notiflix from 'notiflix';
 import css from './App.module.css';
 import Button from './Button/Button';
 import Modal from './Modal/Modal';
 import Loader from './Loader/Loader';
-
-const KEY = '39479425-6a3db35f3651c21ffc7f636b4';
-
 export class App extends Component {
   state = {
     images: [],
@@ -22,23 +20,48 @@ export class App extends Component {
     error: null,
   };
 
-  fetchImages = async () => {
-    try {
+  componentDidUpdate(_, prevState) {
+    if (
+      this.state.searchImages !== prevState.searchImages ||
+      this.state.page !== prevState.page
+    ) {
       this.setState({ isLoading: true });
-      const { data } = await axios.get(
-        `https://pixabay.com/api/?q=${this.state.searchImages}&page=1&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
-      );
-      this.setState({ images: data.hits });
+      this.fetchImages(this.state.searchImages, this.state.page);
+    }
+  }
+
+  fetchImages = async (query, page) => {
+    try {
+      await fetchPhoto(query, page).then(result => {
+        const data = result.data;
+        const images = data.hits;
+        const total = data.totalHits;
+        const lastImages = total - 12 * this.state.page;
+
+        if (images.length === 0) {
+          this.setState({ showLoadMore: false });
+          Notiflix.Notify.failure(
+            'Sorry, there are no images. Please try again.'
+          );
+          return;
+        } else {
+          this.setState(prevState => ({
+            images: [...prevState.images, ...images],
+          }));
+        }
+        lastImages > 0
+          ? this.setState({ showLoadMore: true })
+          : this.setState({ showLoadMore: false });
+        if (images.length > 0 && this.state.page === 1) {
+          Notiflix.Notify.success(`Yeeesss! We found ${total} images.`);
+        }
+      });
     } catch (error) {
-      this.setState({ error: error.message });
+      Notiflix.Notify.failure(' Oooops...Some error occured...');
     } finally {
       this.setState({ isLoading: false });
     }
   };
-
-  componentDidMount() {
-    this.fetchImages();
-  }
 
   onLoadMore = () => {
     this.setState(prevState => ({
@@ -54,11 +77,9 @@ export class App extends Component {
     }));
   };
 
-  onSubmit = event => {
-    event.preventDefault();
-    const searchData = event.target.elements.search.value;
-    this.setState({ searchImages: searchData });
-    this.fetchImages();
+  onSubmit = FormData => {
+    const { query } = FormData;
+    this.setState({ searchImages: query, page: 1, images: [] });
   };
 
   render() {

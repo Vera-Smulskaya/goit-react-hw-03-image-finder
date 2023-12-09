@@ -1,20 +1,24 @@
 import axios from 'axios';
+import Notiflix from 'notiflix';
 
-const BASE_URL = 'https://pixabay.com/api/';
 const KEY = '39479425-6a3db35f3651c21ffc7f636b4';
 
-export const fetchCardURL = async (query, page, perPage) => {
-  return await axios
-    .get(`${BASE_URL}`, {
-      params: {
-        key: `${KEY}`,
-        q: `${query}`,
-        page: `${page}`,
-        per_page: `${perPage}`,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        safesearch: true,
-      },
-    })
-    .then(response => response.data);
-};
+export async function fetchPhoto(searchPhoto, page) {
+  const searchParams = new URLSearchParams({
+    key: KEY,
+    q: searchPhoto,
+    page: page,
+    per_page: 12,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
+  });
+
+  const response = await axios(`https://pixabay.com/api/?${searchParams}`);
+
+  if (response.status === 404) {
+    Notiflix.Notify.failure('Sprry, some error occured.');
+    return Promise.reject();
+  }
+  return response;
+}
