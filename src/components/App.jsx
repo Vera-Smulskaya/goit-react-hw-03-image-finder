@@ -18,6 +18,7 @@ export class App extends Component {
     largeImageURL: [],
     imageTags: '',
     error: null,
+    lastSearchQuery: '',
   };
 
   componentDidUpdate(_, prevState) {
@@ -74,7 +75,17 @@ export class App extends Component {
 
   onSubmit = FormData => {
     const { query } = FormData;
-    this.setState({ searchImages: query, page: 1, images: [] });
+
+    if (query !== this.state.lastSearchQuery) {
+      this.setState({
+        searchImages: query,
+        page: 1,
+        images: [],
+        lastSearchQuery: query,
+      });
+    } else {
+      Notiflix.Notify.info(`Sorry! You are already looking for ${query}`);
+    }
   };
 
   render() {
